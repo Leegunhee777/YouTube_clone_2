@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 export default function (SpecificComponent, option, adminRoute = null) {
     function AuthenticationCheck(props) {
 
-        let user = useSelector(state => state.user);//<index.js>에서 해당 리듀서 이름이 user여서 state.user로 
+        let user = useSelector(state => state.user);//리듀서의<index.js>에서 해당 리듀서 이름이 user여서 state.user로 
                                                         //user리듀서의 state를가져오는것임
         const dispatch = useDispatch();
 

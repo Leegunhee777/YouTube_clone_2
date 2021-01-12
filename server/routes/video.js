@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Video } = require("../models/Video");
+const {Subscriber} = require("../models/Subscriber");
 const mongoose = require('mongoose');
 
 
@@ -84,6 +85,39 @@ router.post("/getVideoDetail", (req, res) => {
 });
 
 
+// 본인이 구독해놓은 사람들의 모든 영상을 가져와야함
+//본인이 구독한 사람들의 _id를 찾는다-> 그 사람이 올린 영상을 찾는다
+router.post("/getSubscriptionVideos", (req, res) => {
+
+    //자신의 아이디정보를 가지고, 자신이 구독하고있는 사람들 아이디를 찾는다.
+    Subscriber.find({giveUser: req.body.giveUser}) //req.body.giveUser안에는 현재로그인중인 사람의 _id가 들어있다.
+    .exec((err, subscriberInfo)=>{ //쿼리후의 결과가 subscriberInfo에 담긴다.
+       
+        if(err) return res.status(400).send(err);
+
+        let subscribedUser = []; // 현재로그인한유저가 구독하고있는 유저들의 정보(_id)를 담는데에 쓰임
+        subscriberInfo.map((subscriber, i)=>{
+            subscribedUser.push(subscriber.receivedUser)
+        })
+
+
+        //찾은사람들의 비디오를 가지고 온다.
+        //subscribedUser 배열 안에는 내가 구독한사람들의 _id정보들이있는데,
+        //그 사람들 한명,한명이 업로드한 Video를 모두 찾아야함
+
+        //배열안에 1명이있을지 3명이있을지 9명이있을지모른다. 고로,
+        //in 메소드를 사용하면 subscribedUser배열안을 반복문처럼 접근할수있다.
+        Video.find({ writer : {$in: subscribedUser}}).populate('writer')
+        .exec((err, videos)=>{
+            if(err) return res.status(400).send(err);
+            
+            res.status(200).json({success: true, videos})
+        })
+
+    })
+    
+  
+});
 
 
 

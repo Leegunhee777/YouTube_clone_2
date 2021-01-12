@@ -7,11 +7,13 @@ const { Title } = Typography;
 const { Meta } = Card;
 
 
-function LandingPage() {
+function LandingPage({user}) {
 
     const [Videos, setVideos] = useState([])
 
     useEffect(() => {
+       // console.log('user란');//app.js의 Auch함수에 의해 렌더되는 모든 컴포넌트에서 로그인정보에 대한 user(서버에서받아온 리덕스값과연동)값 쓸수있음
+       // console.log(user);
         axios.get('/api/video/getVideos')
             .then(response => {
                 if (response.data.success) {
@@ -21,14 +23,14 @@ function LandingPage() {
                     alert('Failed to get Videos')
                 }
             })
-    }, [])
+    },[] )
 
 
 
 
 
     const renderCards = Videos.map((video, index) => {
-        return <Col lg={6} md={8} xs={48}>
+        return <Col  key= {index} lg={6} md={8} xs={48}>
             <div style={{ position: 'relative' }}>
                 <a href={`/video/${video._id}`} >
                     <video style={{width:'100%' ,height:'200px'}}src={`http://localhost:5000/${video.filePath}`} controls={false}/>
@@ -44,7 +46,7 @@ function LandingPage() {
             - <span> {moment(video.createdAt).format("MMM Do YYYY")} </span>
         </Col>
 
-    })
+    }).reverse()
 
 
 

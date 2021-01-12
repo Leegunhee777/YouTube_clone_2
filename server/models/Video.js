@@ -27,7 +27,7 @@ const videoSchema = mongoose.Schema({
         default: 0
     }
  
-},{timestamps:true}) //timestamps를통해 생성시간과 업데이트시간에 대한 기록을 남길수있음
+},{timestamps:true}) //timestamps를통해 생성시간과 업데이트시간에 대한 기록을 남길수있음(해당필드가 자동으로추가됨)
 
 
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Row, Col, List, Avatar} from 'antd'//반응형으로 반들떄 유용, Row와 Col이거 두개로 일단 전체틀을잡는다!!!.
 import axios from 'axios';
 import SideVideo from './Sections/SideVideo';
-
+import Subscribe from './Sections/Subscribe';
 
 function VideoDetailPage(props){
 
@@ -15,7 +15,6 @@ function VideoDetailPage(props){
          axios.post('/api/video/getVideoDetail',variable)
         .then(response =>{
             if(response.data.success){
-                console.log(response.data);
                 setVideoDetail(response.data.videoDetail);
             }else{
                 alert('비디어 정보를 가져오지 못했습니다.')
@@ -32,7 +31,7 @@ function VideoDetailPage(props){
     
                        
                         <List.Item
-                            actions
+                            actions={[<Subscribe receivedUser={VideoDetail.writer._id} user = {props.user}/>]} //구독버튼처리를위한 컴포넌트임
                         >
                             <List.Item.Meta
                                 avatar ={<Avatar src={VideoDetail.writer.image} />} 
